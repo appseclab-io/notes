@@ -1,0 +1,24 @@
+Date: 18 Nov 2026
+Node.js 22.22.0, npm 11.12.0, registry https://registry.npmjs.org/
+Run from the fixed folder, with no package-lock.json and no node_modules in it.
+
+$ npm install --package-lock-only --ignore-scripts
+
+up to date, audited 70 packages in 840ms
+
+18 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[exit code 0]
+
+$ npm audit
+found 0 vulnerabilities
+[exit code 0]
+
+$ npm audit --json | node ../count.cjs
+packages in package-lock.json: 69
+vulnerable packages: 0 (critical 0, high 0, moderate 0, low 0)
+advisories: 0
+[exit code 0]
+

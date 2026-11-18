@@ -5,3 +5,4 @@ The labs of the AppSecLab notes numbered 001 to 099, one folder each. How to rea
 | Note | What the lab tests | Folder |
 | --- | --- | --- |
 | [001 What is SAST? We ran it on four planted flaws](https://www.appseclab.io/blog/001-what-is-sast/) | What Semgrep reports, and misses, in a 31-line Express app with four planted flaws | [001-what-is-sast](001-what-is-sast/) |
+| [002 What is SCA? Two dependencies, 51 packages, 8 vulnerable](https://www.appseclab.io/blog/002-what-is-sca/) | What `npm audit` finds behind two outdated dependencies | [002-what-is-sca](002-what-is-sca/) |
