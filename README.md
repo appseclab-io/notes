@@ -18,7 +18,7 @@ Each folder has its own README with what it needs and the command to run it. The
 
 ## Read this before you run anything
 
-- Every lab runs on your own machine, against targets it creates there. Nothing in this repository is meant to be pointed at a system you do not own.
+- Most labs run only on your own machine, against targets they create there. One reaches out, as its note did: 004 loads the home page of 19 public sites once.
 - Some folders hold code or a dependency list that is vulnerable on purpose, because that is what the note measures. It is there to be read and scanned, not installed or deployed.
 
 ## Credits

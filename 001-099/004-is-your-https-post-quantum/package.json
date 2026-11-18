@@ -1,0 +1,13 @@
+{
+  "name": "note-004-is-your-https-post-quantum",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lab for AppSecLab note 004: which TLS key exchange Chrome negotiates with a list of sites",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

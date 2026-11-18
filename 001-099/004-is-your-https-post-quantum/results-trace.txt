@@ -1,0 +1,8 @@
+Run on 18 Nov 2026, 04:06 UTC
+Google Chrome 157.0.8103.79, Playwright 1.63.0, Node.js 22.22.0 (OpenSSL 3.5.4), curl 8.7.1 of macOS 27.2.1 (LibreSSL 3.3.6)
+One request per client. Only the kex= line of the page is kept: the page also shows the caller's IP address
+
+$ sh trace.sh
+Chrome 157.0.8103.79	kex=X25519MLKEM768
+Node.js 22.22.0 (OpenSSL 3.5.4)	kex=X25519MLKEM768
+curl 8.7.1 (x86_64-apple-darwin26.0) libcurl/8.7.1 (SecureTransport) LibreSSL/3.3.6 zlib/1.2.12 nghttp2/1.69.0	kex=X25519

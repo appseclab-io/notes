@@ -1,0 +1,25 @@
+Run on 18 Nov 2026, 04:05 UTC
+Google Chrome 157.0.8103.79, Playwright 1.63.0, Node.js 22.22.0, macOS 27.2.1
+One page load per site, in the order of sites.txt
+
+$ node pq-check.cjs $(cat sites.txt)
+Chrome 157.0.8103.79
+https://www.google.com/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://www.youtube.com/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://www.cloudflare.com/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://www.microsoft.com/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.apple.com/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.amazon.com/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.linkedin.com/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.nist.gov/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://csrc.nist.gov/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://www.cisa.gov/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://owasp.org/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.npmjs.com/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://pypi.org/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.mozilla.org/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.gov.uk/	TLS 1.3	X25519MLKEM768	RSA-PSS
+https://www.appseclab.io/	TLS 1.3	X25519MLKEM768	ECDSA P-256
+https://github.com/	TLS 1.3	X25519	ECDSA P-256
+https://www.wikipedia.org/	TLS 1.3	X25519	ECDSA P-256
+https://www.gov.br/	TLS 1.3	X25519	RSA-PSS
