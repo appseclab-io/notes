@@ -1,0 +1,7 @@
+-config replacer.full_list(0).description=scan-session
+-config replacer.full_list(0).enabled=true
+-config replacer.full_list(0).matchtype=REQ_HEADER
+-config replacer.full_list(0).matchstr=Cookie
+-config replacer.full_list(0).replacement=session=<value>
+-config replacer.full_list(0).regex=false
+-config 'replacer.full_list(0).url=https://api\.example/.*'
