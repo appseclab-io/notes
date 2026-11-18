@@ -1,0 +1,83 @@
+Run on 18 Nov 2026, 04:14 UTC
+OpenSSL 4.1.0 23 Oct 2026 (Homebrew), macOS 27.2.1, Apple silicon laptop with 16 GB of memory
+WORKDIR stands for a folder outside the repository
+
+$ sh run.sh WORKDIR
+OpenSSL 4.1.0 23 Oct 2026 (Library: OpenSSL 4.1.0 23 Oct 2026)
+message: 1024 MiB
+1024+0 records in
+1024+0 records out
+1073741824 bytes transferred in 3.896918 secs (275536161 bytes/sec)
+--- /usr/bin/time -l openssl pkeyutl -sign -inkey ec.pem -in digest.bin -pkeyopt digest:sha256 -out ec.sig
+        0.01 real         0.00 user         0.00 sys
+             5586944  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 504  page reclaims
+                  34  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  22  involuntary context switches
+            68896930  instructions retired
+            22699012  cycles elapsed
+             1868160  peak memory footprint
+--- /usr/bin/time -l openssl pkeyutl -sign -inkey mldsa.pem -in msg.bin -pkeyopt deterministic:1 -out full.sig
+        2.04 real         1.96 user         0.08 sys
+          1078951936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               66021  page reclaims
+                  32  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  37  involuntary context switches
+         14097330577  instructions retired
+          4004796424  cycles elapsed
+             2409600  peak memory footprint
+--- /usr/bin/time -l openssl pkeyutl -sign -inkey mldsa.pem -in mu.bin -pkeyopt mu:1 -pkeyopt deterministic:1 -out mu.sig
+        0.01 real         0.00 user         0.00 sys
+             5242880  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 486  page reclaims
+                  31  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                   5  involuntary context switches
+            71447019  instructions retired
+            21325322  cycles elapsed
+             1868136  peak memory footprint
+Signature Verified Successfully
+--- added by run.sh: cmp again, and the size of each file in bytes
+cmp full.sig mu.sig: exit status 0
+ 1073741824 msg.bin
+      32 digest.bin
+    1952 pk.bin
+      64 tr.bin
+      64 mu.bin
+      71 ec.sig
+    3309 full.sig
+    3309 mu.sig
+ 1073750625 total
+--- added by run.sh: 50 more ECDSA signatures of the same digest (how many, bytes)
+  13       70
+  26       71
+  11       72
