@@ -19,6 +19,7 @@ Each folder has its own README with what it needs and the command to run it. The
 ## Read this before you run anything
 
 - Every lab runs on your own machine, against targets it creates there. Nothing in this repository is meant to be pointed at a system you do not own.
+- Some folders hold code or a dependency list that is vulnerable on purpose, because that is what the note measures. It is there to be read and scanned, not installed or deployed.
 
 ## Credits
 

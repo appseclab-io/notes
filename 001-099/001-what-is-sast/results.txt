@@ -1,0 +1,68 @@
+Date: 18 Nov 2026
+Semgrep Community Edition 1.183.0 (Docker image semgrep/semgrep:1.183.0), rule sets as served by the Semgrep registry on 18 Nov 2026, Docker Engine 29.9.3 in Docker Desktop on macOS (arm64)
+Run from the note's folder.
+
+$ docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:1.183.0 semgrep scan --config p/default --config p/expressjs --metrics=off app.js
+               
+               
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 1 file tracked by git with 1077 Code rules:
+                                                                                                                        
+  Language      Rules   Files          Origin      Rules                                                                
+ ─────────────────────────────        ───────────────────                                                               
+  js              156       1          Community    1077                                                                
+  <multilang>      47       1                                                                                           
+                                                                                                                        
+                   
+                   
+┌─────────────────┐
+│ 3 Code Findings │
+└─────────────────┘
+          
+    app.js
+     ❱ javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
+          ❰❰ Blocking ❱❱
+          A CSRF middleware was not detected in your express application. Ensure you are either using one such
+          as `csurf` or `csrf` (see rule references) and/or you are properly doing CSRF validation in your    
+          routes with a token or cookies.                                                                     
+          Details: https://sg.run/BxzR                                                                        
+                                                                                                              
+            5┆ const app = express();
+   
+   ❯❯❱ javascript.express.security.injection.tainted-sql-string.tainted-sql-string
+          ❰❰ Blocking ❱❱
+          Detected user input used to manually construct a SQL string. This is usually bad practice because 
+          manual construction could accidentally result in a SQL injection. An attacker could use a SQL     
+          injection to steal or modify contents of the database. Instead, use a parameterized query which is
+          available by default in most database engines. Alternatively, consider using an object-relational 
+          mapper (ORM) such as Sequelize which will protect your queries.                                   
+          Details: https://sg.run/66ZL                                                                      
+                                                                                                            
+            9┆ const rows = await db.query("SELECT * FROM users WHERE name = '" + req.query.name + "'");
+   
+   ❯❯❱ javascript.lang.security.detect-child-process.detect-child-process
+          ❰❰ Blocking ❱❱
+          Detected calls to child_process from a function argument `req`. This could lead to a command  
+          injection if the input is user controllable. Try to avoid calls to child_process, and if it is
+          needed ensure user input is correctly sanitized or sandboxed.                                 
+          Details: https://sg.run/l2lo                                                                  
+                                                                                                        
+           15┆ exec('ping -c 1 ' + req.query.host, (err, out) => res.send(out));
+
+                
+                
+┌──────────────┐
+│ Scan Summary │
+└──────────────┘
+✅ Scan completed successfully.
+ • Findings: 3 (3 blocking)
+ • Rules run: 203
+ • Targets scanned: 1
+ • Parsed lines: ~100.0%
+ • No ignore information available
+Ran 203 rules on 1 file: 3 findings.
+
+A new version of Semgrep is available. See https://semgrep.dev/docs/upgrading
+[exit code 0]
