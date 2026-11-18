@@ -1,0 +1,35 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Invoices", "version": "1.0.0" },
+  "security": [{ "bearer": [] }],
+  "components": {
+    "securitySchemes": { "bearer": { "type": "http", "scheme": "bearer" } },
+    "schemas": {
+      "Invoice": {
+        "type": "object",
+        "required": ["id", "owner", "items"],
+        "properties": { "id": { "type": "integer" }, "owner": { "type": "string" }, "items": { "type": "integer" } }
+      }
+    }
+  },
+  "paths": {
+    "/invoices": {
+      "get": {
+        "responses": {
+          "200": { "description": "The caller's invoices", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Invoice" } } } } },
+          "401": { "description": "Not signed in" }
+        }
+      }
+    },
+    "/invoices/{id}": {
+      "get": {
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "minimum": 1 } }],
+        "responses": {
+          "200": { "description": "One invoice", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } } },
+          "401": { "description": "Not signed in" },
+          "404": { "description": "No such invoice" }
+        }
+      }
+    }
+  }
+}

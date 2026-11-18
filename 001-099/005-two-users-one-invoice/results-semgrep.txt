@@ -1,0 +1,37 @@
+18 Nov 2026
+Semgrep Community Edition 1.183.0, Docker image semgrep/semgrep:1.183.0 (sha256:2e45517a85e13a9cca14a2a00df6bb48affd66b8ebfae1b0991cd57578362fb0, linux/arm64), Docker 29.9.3
+Rulesets p/default and p/nodejs as the Semgrep registry served them on this day
+
+$ docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:1.183.0 semgrep scan --config p/default --config p/nodejs --metrics=off api.js openapi.json two-users.test.js
+               
+               
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 3 files tracked by git with 1074 Code rules:
+                                                                                                                        
+  Language      Rules   Files          Origin      Rules                                                                
+ ─────────────────────────────        ───────────────────                                                               
+  <multilang>      47       3          Community    1074                                                                
+  js              153       2                                                                                           
+  json              4       1                                                                                           
+                                                                                                                        
+                
+                
+┌──────────────┐
+│ Scan Summary │
+└──────────────┘
+✅ Scan completed successfully.
+ • Findings: 0 (0 blocking)
+ • Rules run: 203
+ • Targets scanned: 3
+ • Parsed lines: ~100.0%
+ • No ignore information available
+Ran 203 rules on 3 files: 0 findings.
+(need more rules? `semgrep login` for additional free Semgrep Registry rules)
+
+
+A new version of Semgrep is available. See https://semgrep.dev/docs/upgrading
+If Semgrep missed a finding, please send us feedback to let us know!
+See https://semgrep.dev/docs/reporting-false-negatives/
+exit code 0

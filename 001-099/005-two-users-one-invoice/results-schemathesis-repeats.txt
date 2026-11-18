@@ -1,0 +1,823 @@
+18 Nov 2026
+Schemathesis 4.28.0, Docker image schemathesis/schemathesis:4.28.0 (sha256:0a71757c60ccdba270c154a859d9dd3d019625f782f23ab36ad604771e15f78b, linux/arm64), Docker 29.9.3
+The API ran on Node.js 22.22.0, started with: node count.js
+The command of results-schemathesis.txt, eight more times. Each run is followed by the counts of its own server.
+Runs 3 to 7 match results-schemathesis.txt. Run 1 lost a connection to the API. Runs 2 and 8 ran more stateful
+scenarios (443 and 356, where the others ran 195) and so generated more cases, with the same failure and the same 18 reads.
+
+Run 1
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.32s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.59s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ 🚫  Fuzzing (in 10.88s)                                                        
+                                                                                
+     ✅ 1 passed  🚫 1 error                                                    
+
+ ✅  Stateful (in 21.65s)                                                       
+
+     Scenarios:    289                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 289 passed                                                              
+
+==================================== ERRORS ====================================
+______________________________ GET /invoices/{id} ______________________________
+Network Error
+
+Connection failed
+
+    Max retries exceeded with url: /invoices/2
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices/2
+
+Need more help?
+    Join our Discord server: https://discord.gg/R9ASRAmHnA
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: gGrhCX
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay gGrhCX
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  🚫 Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Errors:
+  🚫 Network Error: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  2624 generated, 1 found 1 unique failures, 1737 skipped
+
+Seed: 7
+
+========================= 1 failure, 1 error in 33.19s =========================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 2615
+  DELETE 404: 1
+  GET 200: 865
+  GET 401: 1728
+  GET 404: 14
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 25
+  GET /invoices/2: 25
+exit code 0
+
+Run 2
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.22s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.59s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 0.71s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 26.95s)                                                       
+
+     Scenarios:    443                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 443 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: rq3Koo
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay rq3Koo
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  3861 generated, 1 found 1 unique failures, 2567 skipped
+
+Seed: 7
+
+============================= 1 failure in 28.32s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 3833
+  DELETE 404: 1
+  GET 200: 1270
+  GET 401: 2539
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0
+
+Run 3
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.22s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.59s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 0.74s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 13.56s)                                                       
+
+     Scenarios:    195                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 195 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: DiZMVM
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay DiZMVM
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  1958 generated, 1 found 1 unique failures, 1290 skipped
+
+Seed: 7
+
+============================= 1 failure in 14.96s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 1956
+  DELETE 404: 1
+  GET 200: 644
+  GET 401: 1288
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0
+
+Run 4
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.23s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.02s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.79s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 0.72s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 8.66s)                                                        
+
+     Scenarios:    195                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 195 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: Bswzpu
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay Bswzpu
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  1958 generated, 1 found 1 unique failures, 1290 skipped
+
+Seed: 7
+
+============================= 1 failure in 10.31s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 1956
+  DELETE 404: 1
+  GET 200: 644
+  GET 401: 1288
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0
+
+Run 5
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.23s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 1.16s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 1.94s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 8.80s)                                                        
+
+     Scenarios:    195                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 195 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: XdQKe8
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay XdQKe8
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  1958 generated, 1 found 1 unique failures, 1290 skipped
+
+Seed: 7
+
+============================= 1 failure in 11.97s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 1956
+  DELETE 404: 1
+  GET 200: 644
+  GET 401: 1288
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0
+
+Run 6
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.18s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.58s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 0.73s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 8.72s)                                                        
+
+     Scenarios:    195                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 195 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: myvX5u
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay myvX5u
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  1958 generated, 1 found 1 unique failures, 1290 skipped
+
+Seed: 7
+
+============================= 1 failure in 10.10s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 1956
+  DELETE 404: 1
+  GET 200: 644
+  GET 401: 1288
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0
+
+Run 7
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.27s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.58s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 0.82s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 9.27s)                                                        
+
+     Scenarios:    195                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 195 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: CliyJo
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay CliyJo
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  1958 generated, 1 found 1 unique failures, 1290 skipped
+
+Seed: 7
+
+============================= 1 failure in 10.74s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 1956
+  DELETE 404: 1
+  GET 200: 644
+  GET 401: 1288
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0
+
+Run 8
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8092/openapi.json --header "Authorization: Bearer token-ana" --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8092/openapi.json    
+ (in 1.22s)                                                                     
+
+     Base URL:         http://host.docker.internal:8092/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       2 selected / 2 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  2 skipped                                                               
+
+ ❌  Coverage (in 0.58s)                                                        
+                                                                                
+     ✅ 1 passed  ❌ 1 failed                                                   
+
+ ✅  Fuzzing (in 0.74s)                                                         
+                                                                                
+     ✅ 2 passed                                                                
+
+ ✅  Stateful (in 34.05s)                                                       
+
+     Scenarios:    356                                                          
+     API Links:    1 covered / 1 selected / 1 total (1 inferred)                
+
+     ✅ 356 passed                                                              
+
+=================================== FAILURES ===================================
+_______________________________ TRACE /invoices ________________________________
+1. Test Case ID: 6Ncz6U
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' http://host.docker.internal:8092/invoices
+    
+    st replay 6Ncz6U
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 2/2
+  Tested: 2
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ✅ Fuzzing
+  ✅ Stateful
+
+Failures:
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  3379 generated, 1 found 1 unique failures, 2240 skipped
+
+Seed: 7
+
+============================= 1 failure in 35.45s ==============================
+exit code 1
+
+$ node count.js
+invoices API on :8092, counting (Ctrl+C prints the counts)
+requests answered: 3365
+  DELETE 404: 1
+  GET 200: 1115
+  GET 401: 2226
+  GET 404: 16
+  OPTIONS 404: 1
+  PATCH 404: 1
+  POST 404: 1
+  PUT 404: 1
+  QUERY 404: 1
+  TRACE 404: 2
+Bruno's invoice sent to Ana with status 200: 18
+  GET /invoices/2: 18
+exit code 0

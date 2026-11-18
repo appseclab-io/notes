@@ -1,0 +1,94 @@
+18 Nov 2026
+Node.js 22.22.0 (node:test and fetch, no dependencies), macOS on arm64
+Output was sent to a file, so Node printed the TAP form. The folder's absolute path was replaced with a dot.
+
+$ node --test two-users.test.js
+TAP version 13
+# Subtest: Ana reads her own invoice
+ok 1 - Ana reads her own invoice
+  ---
+  duration_ms: 44.056167
+  type: 'test'
+  ...
+# Subtest: Ana cannot read Bruno's invoice
+not ok 2 - Ana cannot read Bruno's invoice
+  ---
+  duration_ms: 4.607709
+  type: 'test'
+  location: './two-users.test.js:20:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    got 200: {"id":2,"owner":"bruno","items":7}
+    
+    200 !== 404
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (./two-users.test.js:22:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: the list shows Ana only her invoices
+ok 3 - the list shows Ana only her invoices
+  ---
+  duration_ms: 3.367875
+  type: 'test'
+  ...
+# Subtest: without a token, nothing
+ok 4 - without a token, nothing
+  ---
+  duration_ms: 1.757292
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 200.486375
+exit code 1
+
+$ OWNERSHIP_CHECK=1 node --test two-users.test.js
+TAP version 13
+# Subtest: Ana reads her own invoice
+ok 1 - Ana reads her own invoice
+  ---
+  duration_ms: 30.679167
+  type: 'test'
+  ...
+# Subtest: Ana cannot read Bruno's invoice
+ok 2 - Ana cannot read Bruno's invoice
+  ---
+  duration_ms: 3.779334
+  type: 'test'
+  ...
+# Subtest: the list shows Ana only her invoices
+ok 3 - the list shows Ana only her invoices
+  ---
+  duration_ms: 2.713459
+  type: 'test'
+  ...
+# Subtest: without a token, nothing
+ok 4 - without a token, nothing
+  ---
+  duration_ms: 1.776167
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 164.035
+exit code 0
