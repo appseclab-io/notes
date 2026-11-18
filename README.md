@@ -18,7 +18,7 @@ Each folder has its own README with what it needs and the command to run it. The
 
 ## Read this before you run anything
 
-- Most labs run only on your own machine, against targets they create there. One reaches out, as its note did: 004 loads the home page of 19 public sites once.
+- Most labs run only on your own machine, against targets they create there. Two reach out, as their notes did: 004 loads the home page of 19 public sites once, and 007 makes a TLS handshake with each host you name. Point 007 only at hosts you own.
 - Some folders hold code or a dependency list that is vulnerable on purpose, because that is what the note measures. It is there to be read and scanned, not installed or deployed.
 
 ## Credits

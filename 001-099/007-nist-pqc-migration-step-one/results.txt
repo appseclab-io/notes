@@ -1,0 +1,101 @@
+Run on 18 Nov 2026, 04:06 to 04:07 UTC
+OpenSSL 4.1.0 23 Oct 2026 (Homebrew), macOS 27.2.1
+Hosts: www.appseclab.io (this site, behind Cloudflare) and ftp.appseclab.io (the FTP channel of the shared host)
+Three things were replaced in this file, each marked in square brackets: the IP address of the shared host,
+its name in the certificate, and the body of that certificate. Nothing else was touched.
+
+=== 1. Hybrid only, the two commands as the note prints them
+$ sh run.sh www.appseclab.io ftp.appseclab.io
+OpenSSL 4.1.0 23 Oct 2026 (Library: OpenSSL 4.1.0 23 Oct 2026)
+groups offered: X25519MLKEM768
+Negotiated TLS1.3 group: X25519MLKEM768
+Connecting to [address of the shared host]
+0013B00602000000:error:0A000410:SSL routines:ssl3_read_bytes:tls alert handshake failure:ssl/record/rec_layer_s3.c:910:SSL alert number 40
+CONNECTED(00000005)
+---
+no peer certificate available
+---
+No client certificate CA names sent
+Negotiated TLS1.3 group NID: 0
+---
+SSL handshake has read 345 bytes and written 1527 bytes
+Verification: OK
+---
+New, (NONE), Cipher is (NONE)
+Protocol: TLSv1.3
+This TLS version forbids renegotiation.
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 0 (ok)
+---
+ECH: NOT CONFIGURED: -103
+---
+
+=== 2. The classical pass: the same two commands with -groups X25519
+$ sh run.sh www.appseclab.io ftp.appseclab.io X25519
+OpenSSL 4.1.0 23 Oct 2026 (Library: OpenSSL 4.1.0 23 Oct 2026)
+groups offered: X25519
+Connecting to [address of the shared host]
+depth=3 C=US, O=Internet Security Research Group, CN=ISRG Root X1
+verify return:1
+depth=2 C=US, O=ISRG, CN=Root YR
+verify return:1
+depth=1 C=US, O=Let's Encrypt, CN=YR1
+verify return:1
+depth=0 CN=[name of the shared host]
+verify return:1
+CONNECTED(00000005)
+---
+Certificate chain
+ 0 s:CN=[name of the shared host]
+   i:C=US, O=Let's Encrypt, CN=YR1
+   a:PKEY: RSA, 2048 (bit); sigalg: sha256WithRSAEncryption
+   v:NotBefore: Oct  4 18:38:35 2026 GMT; NotAfter: Jan  2 18:38:34 2027 GMT
+ 1 s:C=US, O=Let's Encrypt, CN=YR1
+   i:C=US, O=ISRG, CN=Root YR
+   a:PKEY: RSA, 2048 (bit); sigalg: sha256WithRSAEncryption
+   v:NotBefore: Sep  3 00:00:00 2025 GMT; NotAfter: Sep  2 23:59:59 2028 GMT
+ 2 s:C=US, O=ISRG, CN=Root YR
+   i:C=US, O=Internet Security Research Group, CN=ISRG Root X1
+   a:PKEY: RSA, 4096 (bit); sigalg: sha256WithRSAEncryption
+   v:NotBefore: May 13 00:00:00 2026 GMT; NotAfter: Sep  2 23:59:59 2032 GMT
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+[certificate body removed from this file: 28 lines]
+-----END CERTIFICATE-----
+subject=CN=[name of the shared host]
+issuer=C=US, O=Let's Encrypt, CN=YR1
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: rsa_pss_rsae_sha256
+Peer Temp Key: X25519, 253 bits
+---
+SSL handshake has read 4980 bytes and written 429 bytes
+Verification: OK
+---
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Protocol: TLSv1.3
+Server public key is 2048 bit
+This TLS version forbids renegotiation.
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 0 (ok)
+---
+ECH: NOT CONFIGURED: -103
+---
+220 You will be disconnected after 15 minutes of inactivity.
+DONE
+
+=== 3. Not in the note: the first command of pass 2 again, with a wider filter
+$ openssl s_client -connect www.appseclab.io:443 \
+    -servername www.appseclab.io -groups X25519 \
+    </dev/null 2>&1 | grep -E 'Negotiated|alert|Peer Temp Key|Peer signature type|Server public key'
+Peer signature type: ecdsa_secp256r1_sha256
+Peer Temp Key: X25519, 253 bits
+Server public key is 256 bit
