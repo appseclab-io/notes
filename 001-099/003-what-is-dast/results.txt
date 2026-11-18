@@ -1,0 +1,157 @@
+Date: 18 Nov 2026
+Schemathesis 4.28.0 (Docker image schemathesis/schemathesis:4.28.0), Node.js 22.22.0, Docker Engine 29.9.3 in Docker Desktop on macOS (arm64)
+api.js was started with node api.js right before the run, so it held one item.
+
+$ docker run --rm schemathesis/schemathesis:4.28.0 run http://host.docker.internal:8091/openapi.json --seed 7 --max-examples 50
+Schemathesis v4.28.0
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://host.docker.internal:8091/openapi.json    
+ (in 1.31s)                                                                     
+
+     Base URL:         http://host.docker.internal:8091/                        
+     Specification:    Open API 3.0.3                                           
+     Operations:       3 selected / 3 total                                     
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.01s)                                                        
+                                                                                
+     ⏭  3 skipped                                                               
+
+ ❌  Coverage (in 3.43s)                                                        
+                                                                                
+     ❌ 3 failed                                                                
+
+ ❌  Fuzzing (in 0.31s)                                                         
+                                                                                
+     ❌ 3 failed                                                                
+
+ ❌  Stateful (in 6.81s)                                                        
+
+     Scenarios:    225                                                          
+     API Links:    2 covered / 2 selected / 2 total (2 inferred)                
+
+     ✅ 223 passed  ❌ 2 failed                                                 
+
+=================================== FAILURES ===================================
+__________________________________ GET /items __________________________________
+1. Test Case ID: qbRJpo
+
+- Response violates schema
+
+    "1" is not of type "integer"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Item/properties/id:
+
+        {
+            "type": "integer"
+        }
+
+    Value:
+
+        "1"
+
+[200] OK:
+
+    `[{"id":"1","name":"scanner"}]`
+
+Reproduce with:
+
+    curl -X GET http://host.docker.internal:8091/items
+    
+    st replay qbRJpo
+
+_______________________________ GET /items/{id} ________________________________
+1. Test Case ID: 4GioQ1
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 404
+
+[500] Internal Server Error:
+
+    `{"error":"internal error"}`
+
+Reproduce with:
+
+    curl -X GET http://host.docker.internal:8091/items/null%2Cnull
+    
+    st replay 4GioQ1
+
+_________________________________ POST /items __________________________________
+1. Test Case ID: w1OM7i
+
+- API accepted schema-violating request
+
+    Invalid data should have been rejected
+    Expected: 400, 401, 403, 404, 405, 406, 409, 415, 422, 428, 429, 5xx
+    Invalid component: in body - violates `minLength`, `maxLength` at /properties/name
+
+[201] Created:
+
+    `{"id":18,"name":"i[9B􃝑a}$ÝÉu\u0013±\u0018򃛓L󃤮񟝧󤴱򻀋¥]󃽉򏗼f2𮡂𕹕w􏠞\u000bÇý񊫏􇍗\u00138u𕿯򹏪ÀI}1S+󳋙򈡳vü򓪷e򂥇\u0016򊋉񰁘\u001e"}`
+
+Reproduce with:
+
+    curl -X POST -H 'Content-Type: application/json' -d '{"name": "\u009ci[9B\udbcd\udf51a}$\u00dd\u00c9\u009du\u0013\u00b1\u0018\ud9cd\uded3L\udace\udd2e\u0090\u0096\ud93d\udf67\udb53\udd31\udaac\udc0b\u00a5\u009e]\udacf\udf49\ud9fd\uddfcf2\ud87a\udc42\ud817\ude55\u0099w\udbfe\udc1e\u000b\u00c7\u00fd\ud8ea\udecf\udbdc\udf57\u00138u\ud817\udfef\udaa4\udfea\u00c0I}1S+\udb8c\uded9\ud9e2\udc73v\u00fc\uda0e\udeb7e\ud9ca\udd47\u0016\ud9e8\udec9\ud980\udc58\u0092\u001e"}' http://host.docker.internal:8091/items
+    
+    st replay w1OM7i
+
+_________________________________ TRACE /items _________________________________
+1. Test Case ID: LKgWZV
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 404, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[404] Not Found:
+
+    `{"error":"not found"}`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Content-Type: application/json' -d '{"name": "0"}' http://host.docker.internal:8091/items
+    
+    st replay LKgWZV
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 3/3
+  Tested: 3
+
+Test Phases:
+  ⏭  Examples
+  ❌ Coverage
+  ❌ Fuzzing
+  ❌ Stateful
+
+Failures:
+  ❌ Server error: 1
+  ❌ Response violates schema: 1
+  ❌ API accepted schema-violating request: 1
+  ❌ Undocumented HTTP status code: 1
+  ❌ Unsupported methods: 1
+
+Schema Coverage report: ./schema-coverage.html
+
+Test cases:
+  774 generated, 4 found 5 unique failures, 3 skipped
+
+Seed: 7
+
+============================= 5 failures in 10.62s =============================
+[exit code 1]

@@ -1,0 +1,21 @@
+Date: 18 Nov 2026
+curl 8.7.1, Node.js 22.22.0
+The curl commands Schemathesis printed in results.txt, with host.docker.internal changed to localhost
+and -s -w added to print the status. api.js was restarted first, so the new item gets id 2, not 18.
+
+$ curl -s -w '\n[HTTP %{http_code}]\n' -X GET http://localhost:8091/items
+[{"id":"1","name":"scanner"}]
+[HTTP 200]
+
+$ curl -s -w '\n[HTTP %{http_code}]\n' -X GET http://localhost:8091/items/null%2Cnull
+{"error":"internal error"}
+[HTTP 500]
+
+$ curl -s -w '\n[HTTP %{http_code}]\n' -X POST -H 'Content-Type: application/json' -d '{"name": "\u009ci[9B\udbcd\udf51a}$\u00dd\u00c9\u009du\u0013\u00b1\u0018\ud9cd\uded3L\udace\udd2e\u0090\u0096\ud93d\udf67\udb53\udd31\udaac\udc0b\u00a5\u009e]\udacf\udf49\ud9fd\uddfcf2\ud87a\udc42\ud817\ude55\u0099w\udbfe\udc1e\u000b\u00c7\u00fd\ud8ea\udecf\udbdc\udf57\u00138u\ud817\udfef\udaa4\udfea\u00c0I}1S+\udb8c\uded9\ud9e2\udc73v\u00fc\uda0e\udeb7e\ud9ca\udd47\u0016\ud9e8\udec9\ud980\udc58\u0092\u001e"}' http://localhost:8091/items
+{"id":2,"name":"i[9B􃝑a}$ÝÉu\u0013±\u0018򃛓L󃤮񟝧󤴱򻀋¥]󃽉򏗼f2𮡂𕹕w􏠞\u000bÇý񊫏􇍗\u00138u𕿯򹏪ÀI}1S+󳋙򈡳vü򓪷e򂥇\u0016򊋉񰁘\u001e"}
+[HTTP 201]
+
+$ curl -s -w '\n[HTTP %{http_code}]\n' -X TRACE -H 'Content-Type: application/json' -d '{"name": "0"}' http://localhost:8091/items
+{"error":"not found"}
+[HTTP 404]
+
