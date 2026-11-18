@@ -1,0 +1,16 @@
+Run on 18 Nov 2026, 04:19 UTC
+Node.js 22.23.4 (bundled OpenSSL 3.5.9), macOS 27.2.1
+
+$ node -p process.versions.openssl
+3.5.9
+
+$ node api-check.mjs
+Node.js 22.23.4, bundled OpenSSL 3.5.9
+tls.DEFAULT_ECDH_CURVE = "auto"
+tls.DEFAULT_MIN_VERSION = TLSv1.2, tls.DEFAULT_MAX_VERSION = TLSv1.3
+crypto.generateKeyPairSync('ml-kem-768'): throws ERR_INVALID_ARG_VALUE
+crypto.generateKeyPairSync('ml-dsa-65'): throws ERR_INVALID_ARG_VALUE
+crypto.subtle.generateKey('ML-KEM-768', ["encapsulateKey","decapsulateKey"]): rejects with TypeError: Failed to execute 'generateKey' on 'SubtleCrypto': 3rd argument, index 0 value 'encapsulateKey' is not a valid enum value of type KeyUsage.
+crypto.subtle.generateKey('ML-KEM-768', []): rejects with NotSupportedError: Unrecognized algorithm name
+crypto.subtle.generateKey('ML-DSA-65', ["sign","verify"]): rejects with NotSupportedError: Unrecognized algorithm name
+crypto.subtle.generateKey('ML-DSA-65', []): rejects with NotSupportedError: Unrecognized algorithm name

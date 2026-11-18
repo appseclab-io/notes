@@ -1,0 +1,30 @@
+Run on 18 Nov 2026
+Docker image ubuntu:24.04 (Ubuntu 24.04.5 LTS, arm64, image created 10 Nov 2026)
+The image has the OpenSSL library and not the openssl command, so the second run installs the openssl package first.
+
+=== 1. The image as it comes, started with no network (04:14 UTC)
+$ docker run --rm --network none ubuntu:24.04 sh -c 'grep PRETTY_NAME /etc/os-release; openssl version'
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+sh: 1: openssl: not found
+exit status: 127
+
+$ docker run --rm --network none ubuntu:24.04 dpkg-query -W libssl3t64 openssl
+dpkg-query: no packages found matching openssl
+libssl3t64:arm64	3.0.13-0ubuntu3.16
+exit status: 1
+
+=== 2. With the openssl package from Ubuntu's own repository (apt-get install openssl)
+$ dpkg-query -W openssl libssl3t64
+libssl3t64:arm64	3.0.13-0ubuntu3.16
+openssl	3.0.13-0ubuntu3.16
+$ openssl version
+OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)
+$ openssl s_client -connect 127.0.0.1:443 -groups X25519MLKEM768 </dev/null
+Call to SSL_CONF_cmd(-groups, X25519MLKEM768) failed
+20702592FFFF0000:error:0A080106:SSL routines:gid_cb:passed invalid argument:../ssl/t1_lib.c:750:group 'X25519MLKEM768' cannot be set
+
+The control, a group this version knows. Nothing listens on that port, so it gets as far as the connection and fails there:
+$ openssl s_client -connect 127.0.0.1:443 -groups X25519 </dev/null
+20A0558DFFFF0000:error:8000006F:system library:BIO_connect:Connection refused:../crypto/bio/bio_sock2.c:114:calling connect()
+20A0558DFFFF0000:error:10000067:BIO routines:BIO_connect:connect error:../crypto/bio/bio_sock2.c:116:
+connect:errno=111
