@@ -1,0 +1,12 @@
+{
+  "name": "note-011-what-is-a-cbom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lab for AppSecLab note 011: a small app with eight uses of cryptography, read by a CBOM generator",
+  "license": "MIT",
+  "main": "app.js",
+  "dependencies": {
+    "bcryptjs": "3.0.3",
+    "jsonwebtoken": "9.0.3"
+  }
+}

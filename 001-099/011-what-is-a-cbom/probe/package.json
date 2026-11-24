@@ -1,0 +1,10 @@
+{
+  "name": "note-011-probe",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lab for AppSecLab note 011: 32 ways to ask Node.js for cryptography, read by a CBOM generator and never run",
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "9.0.3"
+  }
+}

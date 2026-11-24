@@ -1,0 +1,51 @@
+Run on 24 Nov 2026, 13:46 UTC
+cdxgen 13.8.0 (image ghcr.io/cdxgen/cdxgen:v13.8.0-arm64), Docker 29.9.3, macOS 27.2.1, Apple silicon
+Network off (--network none); the probe folder mounted read-only
+
+$ docker run --rm --network none -v "$PWD/probe:/app:ro" -v "$PWD:/out" ghcr.io/cdxgen/cdxgen:v13.8.0-arm64 --include-crypto --spec-version 1.7 -o /out/probe-cbom.json /app
++------------------------+------------+--------------------------+----------------------------------------------------+
+|                                           SECURE MODE: Environment audit                                            |
+|                                                        1 low                                                        |
++------------------------+------------+--------------------------+----------------------------------------------------+
+| Category               | Severity   | Variable(s)              | Details                                            |
++------------------------+------------+--------------------------+----------------------------------------------------+
+| Credential Exposure    | LOW        | SWIFT_SIGNING_KEY        | Credential-like environment variables are set. Bui |
+|                        |            |                          | ld tools or install scripts invoked during SBOM ge |
+|                        |            |                          | neration may read inherited environment variables. |
+|                        |            |                          | Mitigation: Unset unneeded secrets when scanning u |
+|                        |            |                          | ntrusted repositories. Prefer ephemeral, scoped CI |
+|                        |            |                          |  credentials injected only for the step that needs |
+|                        |            |                          |  them.                                             |
++------------------------+------------+--------------------------+----------------------------------------------------+
+✔ Preparing environment  0.0s
+  15 npm, 11 cryptographic-asset in /app
+✔ Scanning 1 path  26 components  0.5s
+✔ Generating BOM  26 components  0.5s
+✔ Post-processing BOM  0.0s
+Creating reachables slice for /app. Please wait ...
+WARN: atom is limited to a 3.9 GiB heap, below the 7 GiB that slice computation is comfortable with. Slicing large projects may take a long time or run out of memory. Raise it with ATOM_MAX_HEAP (for example ATOM_MAX_HEAP=8g) on a host with more memory.
+Creating usages slice for /app. Please wait ...
+Callsites attribution: 32 records; 0 by purl, 3 by the ecosystem rule, 0 to the runtime, 29 unattributed.
+/out/probe-cbom.json created successfully.
+✔ Validating BOM  valid (js)  0.0s
+
+$ jq -r '.components[] | select(.type == "cryptographic-asset") | .name as $n | .properties[] | select(.name == "cdx:crypto:sourceLocation") | "\(.value)\t\($n)"' probe-cbom.json | sort -t: -k2 -n
+probe.js:13:2	sha-256
+probe.js:14:2	sha-512
+probe.js:15:2	sha3-256
+probe.js:18:2	sha-256
+probe.js:20:2	sha-256
+probe.js:21:2	sha-256
+probe.js:26:2	aes256-GCM
+probe.js:31:2	sha256WithRSAEncryption
+probe.js:32:2	sha-256
+probe.js:34:2	rsa
+probe.js:36:2	ed25519
+probe.js:37:2	x25519
+probe.js:38:2	ml-kem-768
+probe.js:39:2	ml-dsa-65
+probe.js:43:2	sha-256
+probe.js:47:2	ecdsaWithSHA256
+
+$ docker run --rm --network none --entrypoint cdx-validate -v "$PWD:/out:ro" ghcr.io/cdxgen/cdxgen:v13.8.0-arm64 -i /out/probe-cbom.json --no-deep --strict | head -1
+schemaValid=true  deepValid=true  pass=53  fail=7  manual=69  errors=4
