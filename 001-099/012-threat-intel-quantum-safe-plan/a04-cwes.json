@@ -1,0 +1,137 @@
+{
+  "source": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+  "category": "A04:2025 Cryptographic Failures",
+  "read": "2026-11-24",
+  "license": "Creative Commons Attribution 3.0 Unported, OWASP Top 10 Team (as the page states)",
+  "cwes": [
+    {
+      "id": 261,
+      "name": "Weak Encoding for Password"
+    },
+    {
+      "id": 296,
+      "name": "Improper Following of a Certificate's Chain of Trust"
+    },
+    {
+      "id": 319,
+      "name": "Cleartext Transmission of Sensitive Information"
+    },
+    {
+      "id": 320,
+      "name": "Key Management Errors (Prohibited)"
+    },
+    {
+      "id": 321,
+      "name": "Use of Hard-coded Cryptographic Key"
+    },
+    {
+      "id": 322,
+      "name": "Key Exchange without Entity Authentication"
+    },
+    {
+      "id": 323,
+      "name": "Reusing a Nonce, Key Pair in Encryption"
+    },
+    {
+      "id": 324,
+      "name": "Use of a Key Past its Expiration Date"
+    },
+    {
+      "id": 325,
+      "name": "Missing Required Cryptographic Step"
+    },
+    {
+      "id": 326,
+      "name": "Inadequate Encryption Strength"
+    },
+    {
+      "id": 327,
+      "name": "Use of a Broken or Risky Cryptographic Algorithm"
+    },
+    {
+      "id": 328,
+      "name": "Reversible One-Way Hash"
+    },
+    {
+      "id": 329,
+      "name": "Not Using a Random IV with CBC Mode"
+    },
+    {
+      "id": 330,
+      "name": "Use of Insufficiently Random Values"
+    },
+    {
+      "id": 331,
+      "name": "Insufficient Entropy"
+    },
+    {
+      "id": 332,
+      "name": "Insufficient Entropy in PRNG"
+    },
+    {
+      "id": 334,
+      "name": "Small Space of Random Values"
+    },
+    {
+      "id": 335,
+      "name": "Incorrect Usage of Seeds in Pseudo-Random Number Generator(PRNG)"
+    },
+    {
+      "id": 336,
+      "name": "Same Seed in Pseudo-Random Number Generator (PRNG)"
+    },
+    {
+      "id": 337,
+      "name": "Predictable Seed in Pseudo-Random Number Generator (PRNG)"
+    },
+    {
+      "id": 338,
+      "name": "Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)"
+    },
+    {
+      "id": 340,
+      "name": "Generation of Predictable Numbers or Identifiers"
+    },
+    {
+      "id": 342,
+      "name": "Predictable Exact Value from Previous Values"
+    },
+    {
+      "id": 347,
+      "name": "Improper Verification of Cryptographic Signature"
+    },
+    {
+      "id": 523,
+      "name": "Unprotected Transport of Credentials"
+    },
+    {
+      "id": 757,
+      "name": "Selection of Less-Secure Algorithm During Negotiation('Algorithm Downgrade')"
+    },
+    {
+      "id": 759,
+      "name": "Use of a One-Way Hash without a Salt"
+    },
+    {
+      "id": 760,
+      "name": "Use of a One-Way Hash with a Predictable Salt"
+    },
+    {
+      "id": 780,
+      "name": "Use of RSA Algorithm without OAEP"
+    },
+    {
+      "id": 916,
+      "name": "Use of Password Hash With Insufficient Computational Effort"
+    },
+    {
+      "id": 1240,
+      "name": "Use of a Cryptographic Primitive with a Risky Implementation"
+    },
+    {
+      "id": 1241,
+      "name": "Use of Predictable Algorithm in Random Number Generator"
+    }
+  ],
+  "note": "The 32 CWEs listed under 'List of Mapped CWEs' on the page, with the names the page gives them."
+}

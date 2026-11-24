@@ -1,0 +1,63 @@
+Run on 24 Nov 2026, 16:07 UTC
+Node.js v22.23.4, macOS 27.2.1
+kev-2026-11-23.json is the catalog as cisa.gov served it on 24 Nov 2026 (version 2026.11.23)
+
+$ node kev-report.mjs --file kev-2026-11-23.json
+KEV catalog 2026.11.23, released 2026-11-23T19:43:55.7979Z
+Entries: 1792
+With at least one CWE: 1617. With none: 175
+CWEs mapped to A04:2025 Cryptographic Failures: 32
+
+Entries with a CWE of A04: 14 (0.78% of the catalog, 0.87% of the entries with a CWE)
+Of those, used in ransomware campaigns: 2
+
+By CWE
+  CWE-347  6   Improper Verification of Cryptographic Signature
+  CWE-326  4   Inadequate Encryption Strength
+  CWE-321  1   Use of Hard-coded Cryptographic Key
+  CWE-324  1   Use of a Key Past its Expiration Date
+  CWE-330  1   Use of Insufficiently Random Values
+  CWE-340  1   Generation of Predictable Numbers or Identifiers
+
+By year added
+  2021  4   of 311 added that year
+  2022  4   of 555 added that year
+  2025  3   of 245 added that year
+  2026  3   of 308 added that year
+
+The entries
+  2021-11-03  CVE-2018-15811   CWE-326              DotNetNuke (DNN): DotNetNuke (DNN)
+  2021-11-03  CVE-2018-18325   CWE-326              DotNetNuke (DNN): DotNetNuke (DNN)
+  2021-11-03  CVE-2020-1464    CWE-347              Microsoft: Windows
+  2021-11-03  CVE-2020-1472    CWE-330  ransomware  Microsoft: Netlogon
+  2022-01-10  CVE-2017-1000486 CWE-326              Primetek: Primefaces Application
+  2022-03-03  CVE-2022-20703   CWE-347              Cisco: Small Business RV160, RV260, RV340, and RV345 Series Routers
+  2022-03-25  CVE-2020-2021    CWE-347  ransomware  Palo Alto Networks: PAN-OS
+  2022-04-11  CVE-2017-11317   CWE-326              Telerik: User Interface (UI) for ASP.NET AJAX
+  2025-04-08  CVE-2025-30406   CWE-321              Gladinet: CentreStack
+  2025-10-14  CVE-2025-47827   CWE-324              IGEL: IGEL OS
+  2025-12-16  CVE-2025-59718   CWE-347              Fortinet: Multiple Products
+  2026-06-29  CVE-2026-48558   CWE-347              SimpleHelp: SimpleHelp
+  2026-09-24  CVE-2026-5430    CWE-347              WSO2: Multiple Products
+  2026-10-30  CVE-2026-118527  CWE-340              Ivanti: Connect Secure
+
+Not in A04, shown apart
+  5   Certificate validation (CWE-295, 297, 298, 299)
+  11  Hard-coded credentials (CWE-259, 798)
+
+$ node kev-crypto.mjs
+Catalog 2026.11.23: 1792 entries, 14 with a CWE of A04
+2026-10-30 CVE-2026-118527 CWE-340 Ivanti
+2026-09-24 CVE-2026-5430 CWE-347 WSO2
+2026-06-29 CVE-2026-48558 CWE-347 SimpleHelp
+2025-12-16 CVE-2025-59718 CWE-347 Fortinet
+2025-10-14 CVE-2025-47827 CWE-324 IGEL
+2025-04-08 CVE-2025-30406 CWE-321 Gladinet
+2022-04-11 CVE-2017-11317 CWE-326 Telerik
+2022-03-25 CVE-2020-2021 CWE-347 Palo Alto Networks
+2022-03-03 CVE-2022-20703 CWE-347 Cisco
+2022-01-10 CVE-2017-1000486 CWE-326 Primetek
+2021-11-03 CVE-2018-15811 CWE-326 DotNetNuke (DNN)
+2021-11-03 CVE-2018-18325 CWE-326 DotNetNuke (DNN)
+2021-11-03 CVE-2020-1464 CWE-347 Microsoft
+2021-11-03 CVE-2020-1472 CWE-330 Microsoft
