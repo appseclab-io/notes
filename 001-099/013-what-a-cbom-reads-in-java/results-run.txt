@@ -1,0 +1,61 @@
+Run of 24 November 2026. Temurin JDK 27+35, Maven 3.10.0, BouncyCastle bcprov-jdk18on 1.87, macOS on Apple silicon.
+
+$ mvn -q compile exec:java
+java 27+35, Eclipse Adoptium
+J01  ok    SHA-256, 256 bits
+J02  ok    SHA-512, 512 bits
+J03  ok    SHA-384, 384 bits
+J04  ok    SHA3-512, 512 bits
+J05  ok    SHA3-256, 256 bits
+J06  ok    HmacSHA256, 256 bits
+J07  ok    PBKDF2WithHmacSHA256, 100000 iterations, 256 bits
+J08  ok    HKDF-SHA256, 256 bits
+J09  ok    AES/GCM/NoPadding, key 256 bits, 24 bytes out
+J10  ok    AES/CBC/PKCS5Padding, key 128 bits, 16 bytes out
+J11  ok    AES, IV none, 16 bytes out
+J12  ok    AES_256/GCM/NoPadding, 24 bytes out
+J13  ok    ChaCha20-Poly1305, 24 bytes out
+J14  ok    DESede/CBC/PKCS5Padding, key 192 bits, 16 bytes out
+J15  ok    RSA/ECB/OAEPWithSHA-256AndMGF1Padding, 2048 bits out
+J16  ok    AES/KW/NoPadding, 40 bytes out
+J17  ok    SHA256withRSA, 2048 bits
+J18  ok    SHA256withECDSA, 72 bytes
+J19  ok    RSASSA-PSS, 2048 bits
+J20  ok    Ed25519, 64 bytes
+J21  ok    RSA, 3072 bits
+J22  ok    EC, 120 bytes encoded
+J23  ok    X25519, 256 bits
+J24  ok    DH, 2048 bits
+J25  ok    EC, X.509
+J26  ok    DRBG, 16 bytes
+J27  ok    NativePRNG, 16 bytes
+P01  ok    ML-KEM-768, ciphertext 1088 bytes, secret 256 bits
+P02  ok    ML-KEM-1024, public key 1590 bytes encoded
+P03  ok    DHKEM, ciphertext 32 bytes, secret 256 bits
+P04  ok    ML-DSA-65, signature 3309 bytes
+T01  ok    TLSv1.3, provider SunJSSE
+T02  ok    TLSv1.2, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+T03  ok    TLSv1.3, TLS_AES_256_GCM_SHA384
+T04  ok    named groups X25519MLKEM768
+T05  ok    TLSv1.3,TLSv1.2, first group X25519MLKEM768, first suite TLS_AES_256_GCM_SHA384
+B01  ok    SHA-256, 256 bits
+B02  ok    SHA3-256, 256 bits
+B03  ok    SHA-256/HMAC, 256 bits
+B04  ok    PBKDF2 with HMAC-SHA-256, 100000 iterations, 256 bits
+B05  ok    scrypt N=16384 r=8 p=1, 256 bits
+B06  ok    Argon2id m=19456 KiB t=2 p=1, 256 bits
+B07  ok    AES/GCM, key 256 bits, 24 bytes out
+B08  ok    AES/GCM, key 256 bits, 24 bytes out
+B09  ok    ChaCha20Poly1305, 24 bytes out
+B10  ok    AES/CBC, key 128 bits, 16 bytes out
+B11  ok    RSA-OAEP with SHA-256, 2048 bits out
+B12  ok    ECDSA on secp256r1 with SHA-256, 72 bytes
+B13  ok    Ed25519, 64 bytes
+B14  ok    X25519, 256 bits
+B15  ok    ML-KEM-768, ciphertext 1088 bytes, secret 256 bits
+B16  ok    ml-dsa-65, signature 3309 bytes
+B17  ok    sha2-128f, signature 17088 bytes
+B18  ok    ML-DSA-65 from BC, signature 3309 bytes
+B19  ok    AES/GCM/NoPadding from BC, 24 bytes out
+55 cases ran, 0 failed
+exit code: 0

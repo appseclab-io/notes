@@ -1,0 +1,270 @@
+Run of 25 November 2026. SonarQube Community Build 26.4.0.121862 with sonar-cryptography 1.7.0 and sonar-java 8.27; sonar-maven-plugin 5.9.0.7382; Maven 3.10.0 on Temurin JDK 27, scanner engine on the JRE the server provisions (Temurin 21.0.9).
+Quality profile: Sonar way plus the two rules of the plugin's Java repository.
+
+== app
+
+Scanner log, the plugin's lines:
+  CBOM was successfully generated 'cbom.json'.
+  ========== CBOM Statistics ==========
+  Detected Assets                  : 6
+   - MessageDigest                 : 1
+   - Key                           : 3
+   - AuthenticatedEncryption       : 1
+   - KeyAgreement                  : 1
+  =====================================
+
+$ node cases.mjs cbom-sonar-app.json app
+1  A hash, named in the call  (App.java:27-31)
+       line  29  algorithm  MD5  [hash, 128; digest]  <- MessageDigest#getInstance
+2  A cipher, named in the call: the key, and so its size, comes from the caller  (App.java:32-41)
+       line  36  algorithm  AES-128-GCM  [ae, 128, gcm; encrypt]  <- Cipher#getInstance
+       line  37  material   initialization-vector 96 bits  <- GCMParameterSpec#<init>
+3  A key pair: the algorithm is named, its size is set in a second call  (App.java:42-48)
+       line  44  material   secret-key 2048 bits  <- KeyPairGenerator#getInstance
+       line  44  algorithm  RSA-2048  [pke, 2048; keygen]  <- KeyPairGenerator#getInstance
+4  A key agreement on a named curve  (App.java:49-58)
+       line  51  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line  51  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line  51  algorithm  EC  [pke; keygen]  <- KeyPairGenerator#getInstance
+       line  52  algorithm  EC-secp256r1  [pke, secp256r1; keygen]  <- ECGenParameterSpec#<init>
+       line  53  algorithm  ECDH  [key-agree]  <- KeyAgreement#getInstance
+5  The same call as 1, with the name read from the environment  (App.java:59-64)
+       nothing
+6  A signature made inside a dependency: the app names RS256  (App.java:65-70)
+       nothing
+7  A password hash made inside a dependency: the app names nothing  (App.java:71-75)
+       nothing
+8  TLS: the two ends choose the key exchange when they connect  (App.java:76-82)
+       nothing
+
+10 cryptographic assets in cbom-sonar-app.json
+8 cases: 4 with an algorithm or a protocol, 0 with key material only, 4 with nothing
+
+== probe
+
+Scanner log, the plugin's lines:
+  CBOM was successfully generated 'cbom.json'.
+  ========== CBOM Statistics ==========
+  Detected Assets                  : 79
+   - PublicKey                     : 1
+   - ProbabilisticSignatureScheme  : 1
+   - PublicKeyEncryption           : 5
+   - SecretKey                     : 15
+   - TLS                           : 4
+   - KeyAgreement                  : 1
+   - StreamCipher                  : 1
+   - AuthenticatedEncryption       : 4
+   - Mac                           : 2
+   - PasswordBasedEncryption       : 1
+   - Signature                     : 8
+   - BlockCipher                   : 7
+   - MessageDigest                 : 10
+   - Key                           : 19
+  =====================================
+
+$ node cases.mjs cbom-sonar-probe.json probe
+B01  hash, SHA-256  (Bc.java:82-90)
+       line  84  algorithm  SHA-256  [hash, 256; digest]  <- SHA256Digest#<init>
+B02  hash, SHA-3 with the size as a number  (Bc.java:91-99)
+       line  93  algorithm  SHA3  [hash; digest]  <- SHA3Digest#<init>
+B03  MAC, HMAC over SHA-256  (Bc.java:100-109)
+       line 102  algorithm  HMAC-SHA-256  [mac; tag]  <- HMac#<init>
+       line 102  algorithm  SHA-256  [hash, 256; digest]  <- SHA256Digest#<init>
+B04  key derivation from a password, PBKDF2  (Bc.java:110-117)
+       line 112  algorithm  PBES2  [kdf]  <- PKCS5S2ParametersGenerator#<init>
+       line 112  algorithm  SHA-256  [hash, 256; digest]  <- SHA256Digest#<init>
+B05  key derivation from a password, scrypt  (Bc.java:118-123)
+       nothing
+B06  password hashing, Argon2id  (Bc.java:124-134)
+       nothing
+B07  cipher, AES-GCM through the factory methods BouncyCastle recommends  (Bc.java:135-144)
+       line 137  algorithm  AES-GCM  [ae, 128, gcm; encrypt]  <- AESEngine#newInstance
+       line 137  algorithm  AES  [block-cipher, 128]  <- AESEngine#newInstance
+B08  cipher, AES-GCM through the constructors of older code  (Bc.java:145-155)
+       line 148  algorithm  AES-GCM  [ae, 128, gcm; encrypt]  <- AESEngine#<init>
+       line 148  algorithm  AES  [block-cipher, 128]  <- AESEngine#<init>
+B09  cipher, ChaCha20-Poly1305  (Bc.java:156-165)
+       line 158  algorithm  Poly1305  [hash; digest]  <- ChaCha20Poly1305#<init>
+       line 158  algorithm  ChaCha20-Poly1305  [ae; encrypt]  <- ChaCha20Poly1305#<init>
+B10  cipher, AES-CBC with PKCS#7 padding  (Bc.java:166-176)
+       line 169  algorithm  AES  [block-cipher, 128]  <- AESEngine#newInstance
+       line 169  algorithm  AES-CBC-PKCS7  [block-cipher, 128, cbc, pkcs7; encrypt]  <- AESEngine#newInstance
+       line 169  algorithm  AES-CBC  [block-cipher, 128, cbc]  <- AESEngine#newInstance
+B11  cipher, RSA with OAEP padding, 2048-bit key generated here  (Bc.java:177-186)
+       line 179  algorithm  RSA-2048  [pke, 2048]  <- RSAKeyPairGenerator#<init>
+       line 182  algorithm  RSA  [pke; encrypt]  <- RSAEngine#<init>
+       line 182  algorithm  SHA-256  [hash, 256; digest]  <- SHA256Digest#<init>
+       line 182  algorithm  RSA-OAEP  [pke, oaep; encrypt]  <- RSAEngine#<init>
+B12  signature, ECDSA on P-256 with SHA-256  (Bc.java:187-198)
+       line 193  algorithm  ECDSA-SHA-256  [signature; sign]  <- ECDSASigner#<init>
+       line 193  algorithm  SHA-256  [hash, 256; digest]  <- SHA256Digest#<init>
+       line 193  algorithm  ECDSA  [signature]  <- ECDSASigner#<init>
+B13  signature, Ed25519  (Bc.java:199-208)
+       line 203  algorithm  Ed25519  [signature, Edwards25519; sign]  <- Ed25519Signer#<init>
+       line 203  algorithm  SHA-512  [hash, 512; digest]  <- Ed25519Signer#<init>
+B14  key agreement, X25519  (Bc.java:209-221)
+       nothing
+B15  key encapsulation, ML-KEM-768  (Bc.java:222-233)
+       nothing
+B16  signature, ML-DSA-65  (Bc.java:234-243)
+       nothing
+B17  signature, SLH-DSA  (Bc.java:244-252)
+       nothing
+B18  signature, ML-DSA-65 through the JCA with BouncyCastle as the provider  (Bc.java:253-263)
+       line 256  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 256  algorithm  ML-DSA-65  [signature, 65; keygen]  <- KeyPairGenerator#getInstance
+       line 257  algorithm  ML-DSA-65  [signature, 65; keygen]  <- Signature#getInstance
+B19  cipher, AES-GCM through the JCA with BouncyCastle as the provider  (Bc.java:264-272)
+       line 266  algorithm  AES-128-GCM  [ae, 128, gcm; encrypt]  <- Cipher#getInstance
+       line 266  material   secret-key, no size  <- Cipher#getInstance
+       line 267  material   secret-key, no size  <- SecretKeySpec#<init>
+       line 267  algorithm  AES-128  [block-cipher, 128; keygen]  <- SecretKeySpec#<init>
+J01  hash, name in the call  (Jca.java:51-56)
+       line  53  algorithm  SHA-256  [hash, 256; digest]  <- MessageDigest#getInstance
+J02  hash, name in a constant  (Jca.java:57-62)
+       line  59  algorithm  SHA-512  [hash, 512; digest]  <- MessageDigest#getInstance
+J03  hash, name passed through a method  (Jca.java:63-72)
+       line  65  algorithm  SHA-384  [hash, 384; digest]  <- no call recorded
+J04  hash, name known only when the app runs  (Jca.java:73-78)
+       nothing
+J05  hash, SHA-3  (Jca.java:79-84)
+       line  81  algorithm  SHA3-256  [hash, 256; digest]  <- MessageDigest#getInstance
+J06  MAC  (Jca.java:85-91)
+       line  87  algorithm  HMAC-SHA-256  [mac; tag]  <- Mac#getInstance
+       line  87  algorithm  SHA-256  [hash, 256; digest]  <- Mac#getInstance
+       line  88  algorithm  HMAC-SHA-256  [mac; tag]  <- SecretKeySpec#<init>
+       line  88  algorithm  SHA-256  [hash, 256; digest]  <- SecretKeySpec#<init>
+       line  88  material   secret-key, no size  <- SecretKeySpec#<init>
+J07  key derivation from a password, PBKDF2  (Jca.java:92-99)
+       line  94  algorithm  HMAC-SHA-256  [mac; tag]  <- SecretKeyFactory#getInstance
+       line  94  algorithm  SHA-256  [hash, 256; digest]  <- SecretKeyFactory#getInstance
+       line  94  algorithm  PBKDF2-HMAC-SHA-256  [kdf, 256; keyderive]  <- SecretKeyFactory#getInstance
+       line  94  material   secret-key 256 bits  <- SecretKeyFactory#getInstance
+       line  95  material   password 64 bits  <- PBEKeySpec#<init>
+J08  key derivation, HKDF through the KDF API (JDK 25)  (Jca.java:100-107)
+       nothing
+J09  cipher, AES-GCM with a 256-bit key generated here  (Jca.java:108-118)
+       line 110  material   secret-key 256 bits  <- KeyGenerator#getInstance
+       line 110  algorithm  AES-256  [block-cipher, 256; keygen]  <- KeyGenerator#getInstance
+       line 113  algorithm  AES-128-GCM  [ae, 128, gcm; encrypt]  <- Cipher#getInstance
+J10  cipher, AES-CBC with a 128-bit key built from bytes  (Jca.java:119-127)
+       line 121  algorithm  AES-128  [block-cipher, 128; keygen]  <- SecretKeySpec#<init>
+       line 121  material   secret-key, no size  <- SecretKeySpec#<init>
+       line 122  algorithm  AES-128-CBC-PKCS5  [block-cipher, 128, cbc, pkcs5; encrypt]  <- Cipher#getInstance
+       line 122  material   secret-key, no size  <- Cipher#getInstance
+J11  cipher, "AES" alone: the JDK fills in ECB and PKCS5Padding  (Jca.java:128-135)
+       line 130  material   secret-key, no size  <- Cipher#getInstance
+       line 130  algorithm  AES-128  [block-cipher, 128; keygen]  <- Cipher#getInstance
+       line 131  algorithm  AES-128  [block-cipher, 128; keygen]  <- SecretKeySpec#<init>
+       line 131  material   secret-key, no size  <- SecretKeySpec#<init>
+J12  cipher, AES-GCM with the key size in the name  (Jca.java:136-142)
+       line 138  material   secret-key, no size  <- Cipher#getInstance
+       line 138  algorithm  AES-256-GCM  [ae, 256, gcm; encrypt]  <- Cipher#getInstance
+       line 139  algorithm  AES-128  [block-cipher, 128; keygen]  <- SecretKeySpec#<init>
+       line 139  material   secret-key, no size  <- SecretKeySpec#<init>
+J13  cipher, ChaCha20-Poly1305  (Jca.java:143-149)
+       line 145  algorithm  Poly1305  [hash; digest]  <- Cipher#getInstance
+       line 145  algorithm  ChaCha20  [stream-cipher; encrypt]  <- Cipher#getInstance
+       line 146  material   secret-key, no size  <- SecretKeySpec#<init>
+       line 146  algorithm  ChaCha20  [stream-cipher; encrypt]  <- SecretKeySpec#<init>
+       line 146  material   secret-key, no size  <- SecretKeySpec#<init>
+J14  cipher, triple DES, a legacy algorithm  (Jca.java:150-158)
+       line 152  algorithm  3DES  [block-cipher, 64; keygen]  <- KeyGenerator#getInstance
+       line 152  material   secret-key, no size  <- KeyGenerator#getInstance
+       line 153  algorithm  3DES-CBC  [block-cipher, 64, cbc, pkcs5; encrypt]  <- Cipher#getInstance
+J15  cipher, RSA with OAEP padding, 2048-bit key generated here  (Jca.java:159-168)
+       line 161  algorithm  RSA-2048  [pke, 2048]  <- KeyPairGenerator#getInstance
+       line 161  material   secret-key 2048 bits  <- KeyPairGenerator#getInstance
+       line 164  algorithm  SHA-256  [hash, 256; digest]  <- Cipher#getInstance
+       line 164  algorithm  RSA-OAEP  [pke, oaep; encrypt]  <- Cipher#getInstance
+       line 164  algorithm  MGF1  [other]  <- Cipher#getInstance
+J16  key wrap, AES-KW  (Jca.java:169-176)
+       line 171  algorithm  AES-128  [block-cipher, 128; keygen]  <- Cipher#getInstance
+       line 172  material   secret-key, no size  <- SecretKeySpec#<init>
+       line 172  algorithm  AES-128  [block-cipher, 128; keygen]  <- SecretKeySpec#<init>
+       line 172  material   secret-key, no size  <- SecretKeySpec#<init>
+       line 173  material   secret-key, no size  <- SecretKeySpec#<init>
+       line 173  algorithm  AES-128  [block-cipher, 128; keygen]  <- SecretKeySpec#<init>
+J17  signature, RSA PKCS#1 v1.5 with SHA-256  (Jca.java:177-186)
+       line 179  algorithm  RSA-2048  [pke, 2048]  <- KeyPairGenerator#getInstance
+       line 179  material   secret-key 2048 bits  <- KeyPairGenerator#getInstance
+       line 181  algorithm  RSA-PKCS1-1.5-SHA-256  [signature, 2048; sign]  <- Signature#getInstance
+       line 181  algorithm  SHA-256  [hash, 256; digest]  <- Signature#getInstance
+J18  signature, ECDSA on P-256  (Jca.java:187-196)
+       line 189  algorithm  EC  [pke; keygen]  <- KeyPairGenerator#getInstance
+       line 189  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 189  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 190  algorithm  EC-secp256r1  [pke, secp256r1; keygen]  <- ECGenParameterSpec#<init>
+       line 191  algorithm  ECDSA-SHA-256  [signature; sign]  <- Signature#getInstance
+       line 191  algorithm  SHA-256  [hash, 256; digest]  <- Signature#getInstance
+J19  signature, RSA-PSS with its parameters set in a second call  (Jca.java:197-207)
+       line 199  algorithm  RSA-2048  [pke, 2048]  <- KeyPairGenerator#getInstance
+       line 199  material   secret-key 2048 bits  <- KeyPairGenerator#getInstance
+       line 201  algorithm  RSA-PSS  [signature; sign]  <- Signature#getInstance
+       line 202  algorithm  SHA-256  [hash, 256; digest]  <- PSSParameterSpec#<init>
+       line 202  material   salt 256 bits  <- PSSParameterSpec#<init>
+       line 202  algorithm  MGF1  [other]  <- PSSParameterSpec#<init>
+J20  signature, Ed25519  (Jca.java:208-216)
+       line 210  algorithm  Ed25519  [signature, Edwards25519; sign]  <- KeyPairGenerator#getInstance
+       line 210  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 210  algorithm  SHA-512  [hash, 512; digest]  <- KeyPairGenerator#getInstance
+       line 211  algorithm  Ed25519  [signature, Edwards25519; sign]  <- Signature#getInstance
+       line 211  algorithm  SHA-512  [hash, 512; digest]  <- Signature#getInstance
+J21  key pair, RSA 3072  (Jca.java:217-224)
+       line 219  material   secret-key 3072 bits  <- KeyPairGenerator#getInstance
+       line 219  algorithm  RSA-3072  [pke, 3072; keygen]  <- KeyPairGenerator#getInstance
+J22  key pair, elliptic curve P-384  (Jca.java:225-232)
+       line 227  algorithm  EC  [pke; keygen]  <- KeyPairGenerator#getInstance
+       line 227  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 227  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 228  algorithm  EC-secp384r1  [pke, secp384r1; keygen]  <- ECGenParameterSpec#<init>
+J23  key agreement, X25519  (Jca.java:233-243)
+       line 235  algorithm  x25519  [key-agree, Curve25519; keygen]  <- KeyPairGenerator#getInstance
+       line 235  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 238  algorithm  x25519  [key-agree, Curve25519; keygen]  <- KeyAgreement#getInstance
+J24  key agreement, finite-field Diffie-Hellman, 2048 bits  (Jca.java:244-257)
+       line 246  algorithm  FFDH-2048  [pke, 2048; keygen]  <- KeyPairGenerator#getInstance
+       line 246  material   secret-key 2048 bits  <- KeyPairGenerator#getInstance
+       line 249  algorithm  FFDH-3072  [pke, 3072; keygen]  <- KeyPairGenerator#getInstance
+       line 249  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 252  algorithm  FFDH-3072  [pke, 3072; keygen]  <- KeyAgreement#getInstance
+J25  key import, an encoded public key read back through a KeyFactory  (Jca.java:258-266)
+       line 260  algorithm  EC  [pke; keygen]  <- KeyPairGenerator#getInstance
+       line 260  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 260  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line 261  algorithm  EC-secp256r1  [pke, secp256r1; keygen]  <- ECGenParameterSpec#<init>
+       line 263  algorithm  EC  [pke; keygen]  <- KeyFactory#getInstance
+       line 263  material   public-key, no size  <- KeyFactory#getInstance
+J26  random numbers, generator named in the call  (Jca.java:267-272)
+       nothing
+J27  random numbers, the JDK's default generator  (Jca.java:273-281)
+       nothing
+P01  key encapsulation, ML-KEM-768 named in the key pair generator  (Pqc.java:22-31)
+       line  24  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line  24  algorithm  ML-KEM-768  [kem, 768; keygen]  <- KeyPairGenerator#getInstance
+P02  key encapsulation, ML-KEM with the parameter set in a second call  (Pqc.java:32-39)
+       line  34  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line  34  algorithm  ML-KEM-768  [kem, 768; keygen]  <- KeyPairGenerator#getInstance
+P03  key encapsulation, the same API with a classical algorithm (DHKEM on X25519)  (Pqc.java:40-49)
+       line  42  algorithm  x25519  [key-agree, Curve25519; keygen]  <- KeyPairGenerator#getInstance
+       line  42  material   secret-key, no size  <- KeyPairGenerator#getInstance
+P04  signature, ML-DSA-65  (Pqc.java:50-59)
+       line  52  algorithm  ML-DSA-65  [signature, 65; keygen]  <- KeyPairGenerator#getInstance
+       line  52  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line  53  algorithm  ML-DSA-65  [signature, 65; keygen]  <- Signature#getInstance
+T01  TLS, protocol version named when the context is created  (Tls.java:16-22)
+       line  18  protocol   TLSv1.3  [tls 1.3]  <- SSLContext#getInstance
+T02  TLS, protocol and cipher suite set on the parameters of an engine  (Tls.java:23-35)
+       line  25  protocol   TLS  [tls]  <- SSLContext#getInstance
+T03  TLS, protocol and cipher suite set on a server socket that is never bound  (Tls.java:36-45)
+       line  39  protocol   TLSv1.3  [tls 1.3]  <- SSLServerSocket#setEnabledProtocols
+       line  40  algorithm  SHA-384  [hash, 384; digest]  <- SSLServerSocket#setEnabledCipherSuites
+       line  40  algorithm  AES-256-GCM  [ae, 256, gcm; encrypt]  <- SSLServerSocket#setEnabledCipherSuites
+       line  40  protocol   TLS  [tls]  <- SSLServerSocket#setEnabledCipherSuites
+T04  TLS, key exchange group named: the hybrid post-quantum group of JDK 27  (Tls.java:46-54)
+       nothing
+T05  TLS, nothing named: what the JDK offers by default  (Tls.java:55-62)
+       nothing
+
+81 cryptographic assets in cbom-sonar-probe.json
+55 cases: 43 with an algorithm or a protocol, 0 with key material only, 12 with nothing

@@ -1,0 +1,33 @@
+Run of 25 November 2026. Temurin JDK 27+35, Maven 3.10.0, BouncyCastle bcprov-jdk18on 1.87 (bc187) and 1.85.2 (bc185).
+
+$ mvn -q compile exec:java -pl jdk
+java 27+35, Eclipse Adoptium
+S01  ok    AES/GCM/NoPadding, key 256 bits
+S02  ok    AES/GCM/NoPadding, key 256 bits
+S03  ok    AES/GCM/NoPadding, key 256 bits
+S04  ok    ML-KEM-1024
+S05  ok    ML-DSA-87, signature 4627 bytes
+S06  ok    DH, 2048 bits, secret 2048 bits
+S07  ok    DESede/CBC/PKCS5Padding, key 192 bits
+C01  ok    ML-KEM, ciphertext 1088 bytes, secret 256 bits
+C02  ok    HKDF-SHA256, 256 bits
+C03  ok    DRBG, 16 bytes
+C04  ok    named groups X25519MLKEM768
+C05  ok    TLSv1.2, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+exit code: 0
+
+$ mvn -q compile exec:java -pl bc187
+N01  ok    AES/GCM, key 256 bits
+N02  ok    ML-KEM-768, ciphertext 1088 bytes, secret 256 bits
+N03  ok    ml-dsa-65, signature 3309 bytes
+N04  ok    sha2-128f, signature 17088 bytes
+exit code: 0
+
+$ mvn -q compile exec:java -pl bc185
+M02  ok    ML-KEM-768, ciphertext 1088 bytes, secret 256 bits
+M03  ok    ml-dsa-65, signature 3309 bytes
+M04  ok    sha2-128f, signature 17088 bytes
+O02  ok    ML-KEM-768, ciphertext 1088 bytes, secret 256 bits
+O03  ok    ml-dsa-65, signature 3309 bytes
+O04  ok    sha2-128f, signature 17088 bytes
+exit code: 0

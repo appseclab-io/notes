@@ -1,0 +1,86 @@
+Run of 25 November 2026. SonarQube Community Build 26.4.0.121862 with sonar-cryptography 1.7.0; sonar-maven-plugin 5.9.0.7382; Maven 3.10.0 on Temurin JDK 27. The three modules were scanned as one project, notes-java-cbom-repro, on a Java quality profile of Sonar way plus the plugin's two Java rules.
+
+Scanner log, the plugin's lines:
+  CBOM was successfully generated 'cbom.json'.
+  ========== CBOM Statistics ==========
+  Detected Assets                  : 19
+   - Key                           : 4
+   - SecretKey                     : 5
+   - AuthenticatedEncryption       : 3
+   - PublicKeyEncryption           : 1
+   - BlockCipher                   : 2
+   - KeyEncapsulationMechanism     : 2
+   - Signature                     : 2
+  =====================================
+
+$ node ../../cases.mjs cbom-sonar-repro.json .
+M02  key encapsulation, ML-KEM-768  (Pq185New.java:28-39)
+       nothing
+M03  signature, ML-DSA-65  (Pq185New.java:40-49)
+       nothing
+M04  signature, SLH-DSA  (Pq185New.java:50-59)
+       nothing
+O02  key encapsulation, ML-KEM-768  (Pq185Old.java:28-39)
+       line  33  algorithm  ML-KEM  [kem; encapsulate]  <- MLKEMGenerator#<init>
+       line  34  algorithm  ML-KEM  [kem; encapsulate]  <- MLKEMExtractor#<init>
+O03  signature, ML-DSA-65  (Pq185Old.java:40-49)
+       line  44  algorithm  ML-DSA  [signature; sign]  <- MLDSASigner#<init>
+O04  signature, SLH-DSA  (Pq185Old.java:50-59)
+       nothing
+N01  AES-GCM with a 256-bit key  (Aes187.java:16-26)
+       line  19  algorithm  AES-GCM  [ae, 128, gcm; encrypt]  <- AESEngine#newInstance
+       line  19  algorithm  AES  [block-cipher, 128]  <- AESEngine#newInstance
+N02  key encapsulation, ML-KEM-768  (Pq187.java:28-39)
+       nothing
+N03  signature, ML-DSA-65  (Pq187.java:40-49)
+       nothing
+N04  signature, SLH-DSA  (Pq187.java:50-59)
+       nothing
+C01  key encapsulation through javax.crypto.KEM, the key pair comes from the caller  (Coverage.java:17-25)
+       nothing
+C02  key derivation through javax.crypto.KDF  (Coverage.java:26-33)
+       nothing
+C03  random numbers, generator named in the call  (Coverage.java:34-39)
+       nothing
+C04  TLS, key exchange group set by name  (Coverage.java:40-48)
+       nothing
+C05  TLS, protocol and cipher suite set on the parameters of an engine  (Coverage.java:49-60)
+       nothing
+S01  AES-GCM, 256-bit key from a KeyGenerator  (Sizes.java:28-38)
+       line  30  material   secret-key 256 bits  <- KeyGenerator#getInstance
+       line  30  algorithm  AES-256  [block-cipher, 256; keygen]  <- KeyGenerator#getInstance
+       line  33  algorithm  AES-128-GCM  [ae, 128, gcm; encrypt]  <- Cipher#getInstance
+       line  34  material   initialization-vector 96 bits  <- GCMParameterSpec#<init>
+S02  AES-GCM, 256-bit key built from an array of 32 bytes  (Sizes.java:39-47)
+       line  41  material   secret-key 256 bits  <- SecretKeySpec#<init>
+       line  41  algorithm  AES-256  [block-cipher, 256; keygen]  <- SecretKeySpec#<init>
+       line  42  algorithm  AES-256-GCM  [ae, 256, gcm; encrypt]  <- Cipher#getInstance
+       line  42  material   secret-key 256 bits  <- Cipher#getInstance
+       line  43  material   initialization-vector 96 bits  <- GCMParameterSpec#<init>
+S03  AES-GCM, the key is a parameter of the method  (Sizes.java:48-55)
+       line  50  algorithm  AES-128-GCM  [ae, 128, gcm; encrypt]  <- Cipher#getInstance
+       line  51  material   initialization-vector 96 bits  <- GCMParameterSpec#<init>
+S04  ML-KEM, parameter set ML-KEM-1024 given to initialize()  (Sizes.java:56-63)
+       line  58  algorithm  ML-KEM-768  [kem, 768; keygen]  <- KeyPairGenerator#getInstance
+       line  58  material   secret-key, no size  <- KeyPairGenerator#getInstance
+S05  ML-DSA, parameter set ML-DSA-87 given to initialize()  (Sizes.java:64-75)
+       line  66  material   secret-key, no size  <- KeyPairGenerator#getInstance
+       line  66  algorithm  ML-DSA-65  [signature, 65; keygen]  <- KeyPairGenerator#getInstance
+       line  69  algorithm  ML-DSA-65  [signature, 65; keygen]  <- Signature#getInstance
+S06  Diffie-Hellman, 2048 bits on both sides  (Sizes.java:76-88)
+       line  78  algorithm  FFDH-2048  [pke, 2048; keygen]  <- KeyPairGenerator#getInstance
+       line  78  material   secret-key 2048 bits  <- KeyPairGenerator#getInstance
+       line  82  algorithm  FFDH-3072  [pke, 3072]  <- KeyAgreement#getInstance
+S07  triple DES, the key the JDK generates has 192 bits  (Sizes.java:89-98)
+       line  91  algorithm  3DES  [block-cipher, 64; keygen]  <- KeyGenerator#getInstance
+       line  91  material   secret-key, no size  <- KeyGenerator#getInstance
+       line  92  algorithm  3DES-CBC  [block-cipher, 64, cbc, pkcs5; encrypt]  <- Cipher#getInstance
+       line  93  material   initialization-vector 64 bits  <- IvParameterSpec#<init>
+
+26 cryptographic assets in cbom-sonar-repro.json
+22 cases: 10 with an algorithm or a protocol, 0 with key material only, 12 with nothing
+Occurrences outside every case:
+  Inputs.java:13  material   secret-key 256 bits  <- KeyGenerator#getInstance
+  Inputs.java:19  material   secret-key, no size  <- KeyPairGenerator#getInstance
+  Inputs.java:13  algorithm  AES-256  [block-cipher, 256; keygen]  <- KeyGenerator#getInstance
+  Inputs.java:19  algorithm  ML-KEM-768  [kem, 768; keygen]  <- KeyPairGenerator#getInstance

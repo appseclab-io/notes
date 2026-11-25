@@ -1,0 +1,56 @@
+Run of 24 November 2026. cdxgen 13.8.0, image ghcr.io/cdxgen/cdxgen:v13.8.0-arm64, --include-crypto --spec-version 1.7.
+
+== app
+
+Tool output:
+  5 maven in /app
+✔ Scanning 1 path  5 components  13.5s
+✔ Generating BOM  5 components  13.5s
+✔ Post-processing BOM  0.0s
+Creating reachables slice for /app. Please wait ...
+Creating usages slice for /app. Please wait ...
+Callsites attribution: 70 records; 2 by purl, 5 by the ecosystem rule, 0 to the runtime, 63 unattributed.
+/out/cbom-cdxgen-app.json created successfully.
+✔ Validating BOM  valid (js)  0.0s
+
+Components by type:
+  cryptographic-asset: 1
+  library: 5
+
+Cryptographic assets (name, OID):
+  aes	2.16.840.1.101.3.4.1
+
+Entries with a source location: 0
+
+Validation:
+  schemaValid=true  deepValid=true  pass=48  fail=12  manual=69  errors=4
+
+== probe
+
+Tool output:
+  1 maven in /app
+✔ Scanning 1 path  1 component  11.5s
+✔ Generating BOM  1 components  11.5s
+✔ Post-processing BOM  0.0s
+Creating reachables slice for /app. Please wait ...
+Creating usages slice for /app. Please wait ...
+Callsites attribution: 683 records; 0 by purl, 171 by the ecosystem rule, 0 to the runtime, 512 unattributed.
+/out/cbom-cdxgen-probe.json created successfully.
+✔ Validating BOM  valid (js)  0.1s
+
+Components by type:
+  cryptographic-asset: 6
+  framework: 1
+
+Cryptographic assets (name, OID):
+  aes	2.16.840.1.101.3.4.1
+  hmacSHA	1.3.6.1.5.5.8.1.2
+  sha-256	2.16.840.1.101.3.4.2.1
+  aes256-GCM	2.16.840.1.101.3.4.1.46
+  chaCha20Poly1305	1.2.840.113549.1.9.16.3.18
+  des	1.3.36.3.1.1
+
+Entries with a source location: 0
+
+Validation:
+  schemaValid=true  deepValid=true  pass=47  fail=13  manual=69  errors=4
