@@ -1,0 +1,12 @@
+{
+  "name": "sbom-demo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "debug": "4.3.1",
+    "is-number": "https://github.com/jonschlinkert/is-number/archive/refs/tags/7.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "mime": "2.5.2"
+  }
+}

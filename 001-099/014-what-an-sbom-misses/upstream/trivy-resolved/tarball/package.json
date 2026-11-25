@@ -1,0 +1,9 @@
+{
+  "name": "resolved-demo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "is-number": "https://github.com/jonschlinkert/is-number/archive/refs/tags/7.0.0.tar.gz",
+    "ms": "2.1.3"
+  }
+}

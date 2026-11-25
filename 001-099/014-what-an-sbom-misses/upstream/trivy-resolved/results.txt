@@ -1,0 +1,27 @@
+Version: 0.76.2
+
+== tarball: what the lockfile says
+      "resolved": "https://github.com/jonschlinkert/is-number/archive/refs/tags/7.0.0.tar.gz",
+      "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+-- cyclonedx: lines with github.com: 0; package URLs:
+pkg:npm/is-number@7.0.0
+pkg:npm/ms@2.1.3
+-- spdx-json: lines with github.com: 0; package URLs:
+pkg:npm/is-number@7.0.0
+pkg:npm/ms@2.1.3
+-- json: lines with github.com: 0; package URLs:
+pkg:npm/is-number@7.0.0
+pkg:npm/ms@2.1.3
+
+== git: what the lockfile says
+      "resolved": "git+ssh://git@github.com/jonschlinkert/is-number.git#98e8ff1da1a89f93d1397a24d7413ed15421c139",
+-- cyclonedx: lines with github.com: 0; package URLs:
+pkg:npm/is-number@7.0.0
+-- spdx-json: lines with github.com: 0; package URLs:
+pkg:npm/is-number@7.0.0
+-- json: lines with github.com: 0; package URLs:
+pkg:npm/is-number@7.0.0
+
+== Trivy still holds the address when it writes the report: a custom template prints it
+is-number: [{other https://github.com/jonschlinkert/is-number/archive/refs/tags/7.0.0.tar.gz}]
+ms: [{other https://registry.npmjs.org/ms/-/ms-2.1.3.tgz}]

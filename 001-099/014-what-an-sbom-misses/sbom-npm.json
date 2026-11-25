@@ -1,0 +1,184 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:8c976196-1dbb-41a8-b6c4-d92297a3af0f",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-25T02:20:26.428Z",
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "tools": [
+      {
+        "vendor": "npm",
+        "name": "cli",
+        "version": "11.12.0"
+      }
+    ],
+    "component": {
+      "bom-ref": "sbom-demo@1.0.0",
+      "type": "library",
+      "name": "app",
+      "version": "1.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/sbom-demo@1.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:private",
+          "value": "true"
+        }
+      ],
+      "externalReferences": []
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "debug@4.3.1",
+      "type": "library",
+      "name": "debug",
+      "version": "4.3.1",
+      "scope": "required",
+      "purl": "pkg:npm/debug@4.3.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "76813076f9b83c278ae0add140dd990b60585016b1c0b0110aa666323b45f1ae7527645bd31a559681519c2383c2a8e9c270286a8e297a537c97744976fde045"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "is-number@7.0.0",
+      "type": "library",
+      "name": "is-number",
+      "version": "7.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/is-number@7.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/jonschlinkert/is-number/archive/refs/tags/7.0.0.tar.gz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5d95f07f58f58c895bf1ab7668fae5185f40dc02fc9f6f7eafce07fc4f0a3face36cc9104831d49406c08f1aff9fd2963bf24f759f2177acdc400b37d32cd7bb"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "mime@2.5.2",
+      "type": "library",
+      "name": "mime",
+      "version": "2.5.2",
+      "scope": "optional",
+      "purl": "pkg:npm/mime@2.5.2",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/mime/-/mime-2.5.2.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b6a921e3b17329e08f0f63d488f07aa646cccec09ab23c407c2eb6fd66a9e6aad459c6feb056ac5d40b923781833988133cbff4299f850ad31fa3d221f214f0e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ms@2.1.2",
+      "type": "library",
+      "name": "ms",
+      "version": "2.1.2",
+      "scope": "required",
+      "purl": "pkg:npm/ms@2.1.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b0690fc7e56332d980e8c5f6ee80381411442c50996784b85ea7863970afebcb53fa36f7be4fd1c9a2963f43d32b25ad98b48cd1bf9a7544c4bdbb353c4687db"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "sbom-demo@1.0.0",
+      "dependsOn": [
+        "debug@4.3.1",
+        "is-number@7.0.0",
+        "mime@2.5.2"
+      ]
+    },
+    {
+      "ref": "debug@4.3.1",
+      "dependsOn": [
+        "ms@2.1.2"
+      ]
+    },
+    {
+      "ref": "is-number@7.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "mime@2.5.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "ms@2.1.2",
+      "dependsOn": []
+    }
+  ]
+}

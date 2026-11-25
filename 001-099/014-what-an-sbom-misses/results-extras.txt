@@ -1,0 +1,12 @@
+== 1. The development dependency (mime), with each tool's switch turned on
+Syft, SYFT_JAVASCRIPT_INCLUDE_DEV_DEPENDENCIES=true:
+debug@4.3.1, is-number@7.0.0, mime@2.5.2, ms@2.1.2, sbom-demo@1.0.0
+Trivy, --include-dev-deps:
+debug@4.3.1, is-number@7.0.0, mime@2.5.2, ms@2.1.2
+== 2. Why cdxgen listed jQuery: the same file, three ways
+a: no library
+b: no library
+c: no library
+== 3. Why Syft listed jq: the same binary under its own name and under another
+named: application jq@1.7.1
+renamed: no entry
