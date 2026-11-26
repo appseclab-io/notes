@@ -103,7 +103,7 @@ Why a call the tool reads can still be missing: in cdxgen 13.8.0 the JavaScript 
 ## Limits
 
 - One version of one tool, on two small files, on 24 November 2026. cdxgen had a release in each of the four weeks before the run, so a later version can list more.
-- The names that are read and then left out, and the RSA key size, were reported to the project on 24 November 2026: [cdxgen issue 4896](https://github.com/cdxgen/cdxgen/issues/4896). Follow it to see whether a later version changes these results.
+- The names that are read and then left out, and the RSA key size, were reported to the project on 24 November 2026: [cdxgen issue 4896](https://github.com/cdxgen/cdxgen/issues/4896). It was fixed: on 26 November 2026 the maintainer merged [pull request 4904](https://github.com/cdxgen/cdxgen/pull/4904), which closes the issue — it maps the OpenSSL spellings, adds the object identifiers the table lacked, and records the RSA modulus and a key's named curve. It is marked for the 13.9.0 release, so the results above are the 13.8.0 snapshot.
 - Only source-level reading was tested. cdxgen can also trace a running command (`tracebom`) and read certificates and Java keystores; none of that was run.
 - The `cbom` shortcut of the same image (`--entrypoint cbom`), which adds `--evidence --deep`, listed the same four entries for the app. So did the scan with the dependencies installed in `node_modules`. Those two runs are not kept as files here.
 - The tag `v13.8.0-arm64` names one build. The tag `v13.8` moves with each patch release.
