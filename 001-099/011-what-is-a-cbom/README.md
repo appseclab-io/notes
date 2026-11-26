@@ -16,8 +16,12 @@ A cryptography bill of materials (CBOM) lists the algorithms, keys, certificates
 | `probe/package.json`, `probe/package-lock.json` | Its one dependency, `jsonwebtoken` 9.0.3 |
 | `probe-cbom.json` | The CBOM of the probe, from our run |
 | `results-probe.txt` | Our run on the probe |
+| `merged-fix/run.sh`, `merged-fix/deps.mjs` | The script that runs a cdxgen source tree inside the image, and its check of the dependencies |
+| `merged-fix/cbom.json`, `merged-fix/results.txt` | The CBOM of the app from the merged fix, and our run |
+| `merged-fix/variants/` | The key agreement of use 4 written three ways, one per file |
+| `merged-fix/variants-cbom.json`, `merged-fix/results-variants.txt` | The CBOM of the three variants, and our run |
 
-Nothing here is installed or started. The scanner reads the two files. `probe.js` must never be run: three of its names are ones Node.js 22 does not accept.
+Nothing here is installed or started. The scanner reads the two files. `probe.js` must never be run: three of its names are ones Node.js 22 does not accept. The files of `merged-fix/variants/` are also only read.
 
 ## Run it
 
@@ -100,10 +104,51 @@ Why a call the tool reads can still be missing: in cdxgen 13.8.0 the JavaScript 
 
 `schemaValid=true` on the validation line is the schema check. The other numbers on that line come from the validator's compliance checks, which the note does not use.
 
+## The merged fix, run before its release
+
+Pull request 4904 is merged, and release 13.9.0 was not out on 26 November 2026. To see what the fix lists, we ran the source of the merge commit inside the same 13.8.0 image, with the dependencies the image already has. `merged-fix/run.sh` copies the source to a temporary folder in the container, points it at the image's `node_modules` and runs it with the flags of the first scan. `merged-fix/deps.mjs` stops the run if the source asks for a dependency the image does not have: this source drops four and adds none.
+
+The source, into a folder outside this one:
+
+```bash
+SRC=/tmp/cdxgen-src
+mkdir -p "$SRC"
+curl -sL -o /tmp/cdxgen-src.tar.gz https://codeload.github.com/cdxgen/cdxgen/tar.gz/d91dedb357fc4aa5ef6d25bb08e1f420615b8f89
+tar -xzf /tmp/cdxgen-src.tar.gz -C "$SRC" --strip-components=1
+```
+
+The app, from this folder, with the network off:
+
+```bash
+docker run --rm --network none \
+  -v "$SRC:/src:ro" -v "$PWD/app:/app:ro" -v "$PWD:/out" \
+  --entrypoint sh ghcr.io/cdxgen/cdxgen:v13.8.0-arm64 \
+  /out/merged-fix/run.sh /out/merged-fix/cbom.json
+```
+
+The tool reports `16 npm, 6 cryptographic-asset`: six of the eight uses.
+
+| Use in `app.js` | Line | In `merged-fix/cbom.json` |
+| --- | --- | --- |
+| 1. `createHash('md5')` | 8 | `md5`, primitive `hash`, as before |
+| 2. `createCipheriv('aes-256-gcm', …)` | 14 | `aes256-GCM` |
+| 3. `generateKeyPairSync('rsa', { modulusLength: 2048 })` | 19 | `rsa`, with `parameterSetIdentifier` `2048` and still no `primitive` |
+| 4. `createECDH('prime256v1')` | 23 | `id-ecDH`, primitive `key-agree`, `ellipticCurve` `x962/prime256v1` |
+| 5. `createHash(process.env.DIGEST \|\| 'sha1')` | 30 | `sha-1`, now with the property `cdx:crypto:runtimeConfigurable` set to `true` |
+| 6. `jwt.sign(…, { algorithm: 'RS256' })` | 35 | `sha256WithRSAEncryption`, primitive `signature`, as before |
+| 7. `bcrypt.hash(password, 12)` | 40 | Nothing as cryptography, as before |
+| 8. `https.get(…)` | 45 | Nothing |
+
+As before, no entry has `nistQuantumSecurityLevel` and no item of `dependencies` refers to a cryptographic asset. The `rsa` entry has no `primitive`, so the file does not say whether that key signs or encrypts, and nothing ties it to the signature of use 6.
+
+The entry of use 4 holds the algorithm, the curve, and the call and line it came from. It says nothing of what the code does with the object afterwards. `merged-fix/variants/` writes that key agreement three ways: `ephemeral.js` generates a key pair on every call, `static.js` loads a private key from disk, and `oneshot.js` uses the one-shot `diffieHellman()`. The scan is the same command with `merged-fix/variants` in place of `app` and `variants-cbom.json` in place of `cbom.json`. It lists one entry, `id-ecDH`, with two source locations: `ephemeral.js:5:15` and `static.js:8:15`. The file does not tell a key made for one exchange from a long-lived one. The one-shot call has no entry: the pull request's documentation says it is skipped, because its algorithm comes from the key objects. In `app.js` the other side's key arrives as an argument, so whether that key is short-lived is not in the code either.
+
+This is the source of one commit with the dependencies of 13.8.0, not the 13.9.0 release. Both files pass the schema check of the image's validator (`schemaValid=true`). The run leaves the same working files as the first scan, in `merged-fix/`; they are not kept.
+
 ## Limits
 
 - One version of one tool, on two small files, on 24 November 2026. cdxgen had a release in each of the four weeks before the run, so a later version can list more.
-- The names that are read and then left out, and the RSA key size, were reported to the project on 24 November 2026: [cdxgen issue 4896](https://github.com/cdxgen/cdxgen/issues/4896). It was fixed: on 26 November 2026 the maintainer merged [pull request 4904](https://github.com/cdxgen/cdxgen/pull/4904), which closes the issue — it maps the OpenSSL spellings, adds the object identifiers the table lacked, and records the RSA modulus and a key's named curve. It is marked for the 13.9.0 release, so the results above are the 13.8.0 snapshot.
+- The names that are read and then left out, and the RSA key size, were reported to the project on 24 November 2026: [cdxgen issue 4896](https://github.com/cdxgen/cdxgen/issues/4896). It was fixed: on 26 November 2026 the maintainer merged [pull request 4904](https://github.com/cdxgen/cdxgen/pull/4904), which closes the issue — it maps the OpenSSL spellings, adds the object identifiers the table lacked, and records the RSA modulus and a key's named curve. It is marked for the 13.9.0 release, so the results of the first two scans are the 13.8.0 snapshot; the section before this one runs the merged source on the app.
 - Only source-level reading was tested. cdxgen can also trace a running command (`tracebom`) and read certificates and Java keystores; none of that was run.
 - The `cbom` shortcut of the same image (`--entrypoint cbom`), which adds `--evidence --deep`, listed the same four entries for the app. So did the scan with the dependencies installed in `node_modules`. Those two runs are not kept as files here.
 - The tag `v13.8.0-arm64` names one build. The tag `v13.8` moves with each patch release.

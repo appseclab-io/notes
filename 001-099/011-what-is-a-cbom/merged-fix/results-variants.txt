@@ -1,0 +1,44 @@
+Run on 26 Nov 2026, 23:27 UTC
+cdxgen source of commit d91dedb (pull request 4904, merged; its package.json says 13.9.0), run inside the image ghcr.io/cdxgen/cdxgen:v13.8.0-arm64 with the dependencies of that image
+Docker 29.9.3, macOS 27.2.1, Apple silicon
+Network off (--network none); the source and the scanned folder mounted read-only
+SRC is the folder that holds the cdxgen source
+
+$ docker run --rm --network none -v "$SRC:/src:ro" -v "$PWD/merged-fix/variants:/app:ro" -v "$PWD:/out" --entrypoint sh ghcr.io/cdxgen/cdxgen:v13.8.0-arm64 /out/merged-fix/run.sh /out/merged-fix/variants-cbom.json
+The image has cdxgen 13.8.0; the source is 13.9.0.
+dependencies: the source no longer uses ajv
+dependencies: the source no longer uses ajv-formats
+dependencies: the source no longer uses ssri
+optionalDependencies: the source no longer uses @bufbuild/protobuf
+Every dependency of the source is in the image.
++------------------------+------------+--------------------------+----------------------------------------------------+
+|                                           SECURE MODE: Environment audit                                            |
+|                                                        1 low                                                        |
++------------------------+------------+--------------------------+----------------------------------------------------+
+| Category               | Severity   | Variable(s)              | Details                                            |
++------------------------+------------+--------------------------+----------------------------------------------------+
+| Credential Exposure    | LOW        | SWIFT_SIGNING_KEY        | Credential-like environment variables are set. Bui |
+|                        |            |                          | ld tools or install scripts invoked during SBOM ge |
+|                        |            |                          | neration may read inherited environment variables. |
+|                        |            |                          | Mitigation: Unset unneeded secrets when scanning u |
+|                        |            |                          | ntrusted repositories. Prefer ephemeral, scoped CI |
+|                        |            |                          |  credentials injected only for the step that needs |
+|                        |            |                          |  them.                                             |
++------------------------+------------+--------------------------+----------------------------------------------------+
+✔ Preparing environment  0.0s
+  1 cryptographic-asset in /app
+✔ Scanning 1 path  1 component  0.4s
+✔ Generating BOM  1 components  0.4s
+✔ Post-processing BOM  0.0s
+Skipping the evidence analysis since the BOM lists no package in a language it supports. Pass -t to choose the language.
+✔ Validating BOM  valid (js)  0.0s
+
+$ jq -r '.components[] | select(.type == "cryptographic-asset") | .name as $n | .properties[] | select(.name == "cdx:crypto:sourceLocation") | "\(.value)\t\($n)"' merged-fix/variants-cbom.json | sort
+ephemeral.js:5:15	id-ecDH
+static.js:8:15	id-ecDH
+
+$ jq -r '.components[] | select(.type == "cryptographic-asset") | "\(.name)\t\(.cryptoProperties.algorithmProperties)"' merged-fix/variants-cbom.json
+id-ecDH	{"primitive":"key-agree","algorithmFamily":"ECDH","ellipticCurve":"x962/prime256v1"}
+
+$ docker run --rm --network none --entrypoint cdx-validate -v "$PWD:/out:ro" ghcr.io/cdxgen/cdxgen:v13.8.0-arm64 -i /out/merged-fix/variants-cbom.json --no-deep --strict | head -1
+schemaValid=true  deepValid=true  pass=40  fail=20  manual=69  errors=12
